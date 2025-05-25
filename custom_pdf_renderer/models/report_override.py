@@ -1,4 +1,4 @@
-from odoo import models, _
+from odoo import models, _, fields
 from odoo.exceptions import UserError
 from collections import OrderedDict
 from weasyprint import HTML
@@ -10,12 +10,18 @@ _logger = logging.getLogger(__name__)
 class ReportOverride(models.AbstractModel):
     _inherit = 'ir.actions.report'
 
+    custom_engine = fields.Boolean(string="Custom Engine", default=False)
+
     def _render_qweb_pdf_prepare_streams(self, report_ref, data, res_ids=None):
         if not data:
             data = {}
         data.setdefault('report_type', 'pdf')
 
         report_sudo = self._get_report(report_ref)
+        
+        if not report_sudo.custom_engine:
+            # Si no es el motor personalizado, llamamos al método original
+            return super()._render_qweb_pdf_prepare_streams(report_ref, data, res_ids=res_ids)
         has_duplicated_ids = res_ids and len(res_ids) != len(set(res_ids))
 
         collected_streams = OrderedDict()
@@ -44,6 +50,7 @@ class ReportOverride(models.AbstractModel):
         if not res_ids or res_ids_wo_stream:
             # Renderizamos el HTML para esos registros
             html, _ = self._render_qweb_html(report_ref, all_res_ids_wo_stream, data=data)
+            
 
             try:
                 pdf_bytes = HTML(string=html).write_pdf()
