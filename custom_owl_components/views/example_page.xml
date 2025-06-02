@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="example_page_template">
+        <t t-call="website.layout">
+            <div class="container mt32 mb32">
+                <h1>Example Page</h1>
+                <p>This is an example page using Odoo's OWL framework.</p>
+                <owl-component juan="'Hello, OWL Component!'"
+                    name="custom_owl_components.ExampleComponent" />
+
+            </div>
+        </t>
+    </template>
+
+    <!-- <template id="assets_backend" name="custom_owl_components assets"
+    inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript"
+    src="/custom_owl_components/static/src/js/example_component.js"></script>
+        </xpath>
+    </template> -->
+
+</odoo>

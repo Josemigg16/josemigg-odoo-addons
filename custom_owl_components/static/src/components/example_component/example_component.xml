@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="custom_owl_components.ExampleComponent">
+            <ChildComponent type="'input'" title="'Nombre:'" xvalue="state.employee[0].name" name="'name'" />
+
+            <ChildComponent type="'select'" title="'País de Nacimiento'" xvalue="state.employee[0].country_of_birth[0]" iteration="state.countries" name="'country_of_birth'" />
+    </t>
+    <t t-name="custom_owl_components.ChildComponent">
+        <form t-on-submit="onSubmit" method="POST" action="/update_employee" >
+            <input name="employeeId" t-att-value="state.employee_id" type="hidden" />
+            <div class="d-flex gap-2 align-items-center">
+                <span t-esc="props.title" />
+                <t t-if="props.type === 'input'">
+                    <input type="text" name="name" t-att-value="props.xvalue" />
+                </t>
+                <t t-if="props.type === 'select'">
+                    <select t-att-name="props.name" t-on-change="onSelectChange">
+                        <t t-foreach="props.iteration" t-as="option" t-key="option.id">
+                            <option
+                                t-att-value="option.id"
+                                t-att-selected="option.id == props.xvalue"
+                            >
+                                <t t-esc="option.name" />
+                            </option>
+                            </t>
+                    </select>
+                </t>
+            </div>
+        </form>
+    </t>
+</templates>
