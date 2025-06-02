@@ -1,0 +1,19 @@
+.alert {
+    padding: 15px;
+    background-color: #c41515;
+    bottom: 15px;
+    right: 15px;
+    position: fixed;
+    color: #fff;
+    font-weight: 500;
+    opacity: 1;
+    transition: transform 0.1s ease-in-out, opacity 0.1s ease-in-out;
+    transform: translateX(0);
+}
+
+.alert-hidden {
+    color: #fff;
+    transform: translateX(150%);
+    opacity: 0;
+}
+

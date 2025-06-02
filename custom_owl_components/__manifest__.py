@@ -10,6 +10,7 @@
         'web.assets_frontend': [
             "custom_owl_components/static/src/components/**/*.js",
             "custom_owl_components/static/src/components/**/*.xml",
+            "custom_owl_components/static/src/components/**/*.scss",
         ],
     },
     "data": [

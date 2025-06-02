@@ -31,7 +31,7 @@ class ExampleController(http.Controller):
     @http.route('/update_employee', type='http', auth='public', csrf=False, methods=['POST'], website=True)
     def update_employee(self, **kwargs):
                 
-        employee_id = kwargs.get('employeeId')
+        employee_id = request.env.user.employee_id.id if request.env.user.employee_id else False
 
         if not employee_id:
             return request.make_response(

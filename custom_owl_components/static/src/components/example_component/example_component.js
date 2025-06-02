@@ -1,17 +1,15 @@
 /** @odoo-module */
 
-import { Component, onWillStart, useState } from "@odoo/owl"
+import { Component, onWillStart, useState, onMounted } from "@odoo/owl"
 import { useService } from "@web/core/utils/hooks"
 import { registry } from "@web/core/registry"
 
 export class ChildComponent extends Component {
   static template = "custom_owl_components.ChildComponent"
   setup() {
-    this.state = useState({ employee_id: 0 })
     this.rpc = useService("rpc")
     onWillStart(async () => {
       let user = await this.rpc("/my/user-info")
-      this.state.employee_id = user.employee_id
     })
   }
 
@@ -41,10 +39,34 @@ export class ChildComponent extends Component {
       })
       .then((data) => {
         console.log("Success:", data)
+        this.showAlert()
       })
       .catch((error) => {
+        this.showAlert("Error al guardar los cambios", "#c41515")
         console.error("Error:", error)
       })
+  }
+
+  showAlert(text = "Datos guardados correctamente", color = "#15c441") {
+    this.alertBox = document.createElement("div")
+    this.alertBox.className = "alert alert-hidden"
+    this.alertBox.textContent = text
+    this.alertBox.style.backgroundColor = color
+    document.body.appendChild(this.alertBox)
+
+    // Forzar reflujo para que el navegador reconozca el cambio de clase
+    requestAnimationFrame(() => {
+      this.alertBox.classList.remove("alert-hidden") // Animación de entrada
+
+      setTimeout(() => {
+        this.alertBox.classList.add("alert-hidden") // Animación de salida
+
+        setTimeout(() => {
+          this.alertBox.remove() // Eliminar del DOM después de la salida
+          this.alertBox = null
+        }, 100) // Espera la duración de la animación de salida (0.1s = 100ms)
+      }, 3000) // Mostrar por 3 segundos
+    })
   }
 }
 
